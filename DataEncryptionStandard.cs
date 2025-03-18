@@ -8,6 +8,8 @@ namespace DataEncryptionStandard
 {
     public partial class DataEncryptionStandard : Form
     {
+        public string? Key { get; set; }
+
         public DataEncryptionStandard()
         {
             InitializeComponent();
@@ -15,14 +17,24 @@ namespace DataEncryptionStandard
 
         private void BtnEncrypt_Click(object sender, EventArgs e)
         {
-            string encrypted = Encrypt(TxtPlain.Text, "00000000");
+            if (Key == null)
+            {
+                MessageBox.Show("Key cannot be null!");
+                return;
+            }
+            string encrypted = Encrypt(TxtPlain.Text, Key);
             TxtEncrypted.Text = encrypted;
             MessageBox.Show("Encrypted text: " + encrypted);
         }
 
         private void BtnDecrypt_Click(object sender, EventArgs e)
         {
-            string decrypted = Decrypt(TxtEncrypted.Text, "00000000");
+            if (Key == null)
+            {
+                MessageBox.Show("Key cannot be null.");
+                return;
+            }
+            string decrypted = Decrypt(TxtEncrypted.Text, Key);
             TxtPlain.Text = decrypted;
             MessageBox.Show("Decrypted text: " + decrypted);
         }
@@ -54,6 +66,12 @@ namespace DataEncryptionStandard
             using var cs = new CryptoStream(ms, provider.CreateDecryptor(), CryptoStreamMode.Read);
             using var sr = new StreamReader(cs);
             return sr.ReadToEnd();
+        }
+
+        private void BtnKey_Click(object sender, EventArgs e)
+        {
+            Key = TxtKey.Text;
+            MessageBox.Show("Key Added!");
         }
     }
 }
