@@ -89,9 +89,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(12, 134);
             label2.Name = "label2";
-            label2.Size = new Size(60, 15);
+            label2.Size = new Size(66, 15);
             label2.TabIndex = 5;
-            label2.Text = "Encrypted";
+            label2.Text = "Cipher Text";
             // 
             // TxtKey
             // 
