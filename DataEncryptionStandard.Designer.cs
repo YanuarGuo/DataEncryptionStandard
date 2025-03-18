@@ -35,42 +35,46 @@
             label1 = new Label();
             label2 = new Label();
             TxtKey = new TextBox();
-            BtnKey = new Button();
             pictureBox1 = new PictureBox();
             label3 = new Label();
+            label4 = new Label();
+            TxtIV = new TextBox();
+            label5 = new Label();
+            CbPadding = new ComboBox();
+            BtnConfirmAll = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // BtnDecrypt
             // 
-            BtnDecrypt.Location = new Point(228, 210);
+            BtnDecrypt.Location = new Point(228, 343);
             BtnDecrypt.Name = "BtnDecrypt";
             BtnDecrypt.Size = new Size(75, 23);
-            BtnDecrypt.TabIndex = 6;
+            BtnDecrypt.TabIndex = 8;
             BtnDecrypt.Text = "Decrypt";
             BtnDecrypt.UseVisualStyleBackColor = true;
             BtnDecrypt.Click += BtnDecrypt_Click;
             // 
             // TxtPlain
             // 
-            TxtPlain.Location = new Point(12, 103);
+            TxtPlain.Location = new Point(12, 252);
             TxtPlain.Name = "TxtPlain";
             TxtPlain.Size = new Size(372, 23);
-            TxtPlain.TabIndex = 3;
+            TxtPlain.TabIndex = 5;
             // 
             // TxtEncrypted
             // 
-            TxtEncrypted.Location = new Point(12, 152);
+            TxtEncrypted.Location = new Point(12, 301);
             TxtEncrypted.Name = "TxtEncrypted";
             TxtEncrypted.Size = new Size(372, 23);
-            TxtEncrypted.TabIndex = 5;
+            TxtEncrypted.TabIndex = 7;
             // 
             // BtnEncrypt
             // 
-            BtnEncrypt.Location = new Point(309, 210);
+            BtnEncrypt.Location = new Point(309, 343);
             BtnEncrypt.Name = "BtnEncrypt";
             BtnEncrypt.Size = new Size(75, 23);
-            BtnEncrypt.TabIndex = 4;
+            BtnEncrypt.TabIndex = 6;
             BtnEncrypt.Text = "Encrypt";
             BtnEncrypt.UseVisualStyleBackColor = true;
             BtnEncrypt.Click += BtnEncrypt_Click;
@@ -78,7 +82,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 82);
+            label1.Location = new Point(12, 231);
             label1.Name = "label1";
             label1.Size = new Size(57, 15);
             label1.TabIndex = 4;
@@ -87,7 +91,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 134);
+            label2.Location = new Point(12, 283);
             label2.Name = "label2";
             label2.Size = new Size(66, 15);
             label2.TabIndex = 5;
@@ -98,23 +102,13 @@
             TxtKey.Location = new Point(12, 33);
             TxtKey.MaxLength = 8;
             TxtKey.Name = "TxtKey";
-            TxtKey.Size = new Size(287, 23);
+            TxtKey.Size = new Size(370, 23);
             TxtKey.TabIndex = 1;
-            // 
-            // BtnKey
-            // 
-            BtnKey.Location = new Point(309, 33);
-            BtnKey.Name = "BtnKey";
-            BtnKey.Size = new Size(75, 23);
-            BtnKey.TabIndex = 2;
-            BtnKey.Text = "Confirm";
-            BtnKey.UseVisualStyleBackColor = true;
-            BtnKey.Click += BtnKey_Click;
             // 
             // pictureBox1
             // 
             pictureBox1.BackColor = SystemColors.ButtonShadow;
-            pictureBox1.Location = new Point(12, 69);
+            pictureBox1.Location = new Point(9, 207);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(373, 3);
             pictureBox1.TabIndex = 8;
@@ -129,14 +123,63 @@
             label3.TabIndex = 9;
             label3.Text = "Key";
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 64);
+            label4.Name = "label4";
+            label4.Size = new Size(107, 15);
+            label4.TabIndex = 12;
+            label4.Text = "Initialization Vector";
+            // 
+            // TxtIV
+            // 
+            TxtIV.Location = new Point(12, 82);
+            TxtIV.MaxLength = 8;
+            TxtIV.Name = "TxtIV";
+            TxtIV.Size = new Size(370, 23);
+            TxtIV.TabIndex = 3;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 114);
+            label5.Name = "label5";
+            label5.Size = new Size(51, 15);
+            label5.TabIndex = 13;
+            label5.Text = "Padding";
+            // 
+            // CbPadding
+            // 
+            CbPadding.FormattingEnabled = true;
+            CbPadding.Items.AddRange(new object[] { "PKCS7", "Zero" });
+            CbPadding.Location = new Point(12, 132);
+            CbPadding.Name = "CbPadding";
+            CbPadding.Size = new Size(370, 23);
+            CbPadding.TabIndex = 14;
+            // 
+            // BtnConfirmAll
+            // 
+            BtnConfirmAll.Location = new Point(309, 168);
+            BtnConfirmAll.Name = "BtnConfirmAll";
+            BtnConfirmAll.Size = new Size(75, 23);
+            BtnConfirmAll.TabIndex = 15;
+            BtnConfirmAll.Text = "Confirm";
+            BtnConfirmAll.UseVisualStyleBackColor = true;
+            BtnConfirmAll.Click += BtnConfirmAll_Click;
+            // 
             // DataEncryptionStandard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(394, 245);
+            ClientSize = new Size(394, 383);
+            Controls.Add(BtnConfirmAll);
+            Controls.Add(CbPadding);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(TxtIV);
             Controls.Add(label3);
             Controls.Add(pictureBox1);
-            Controls.Add(BtnKey);
             Controls.Add(TxtKey);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -160,8 +203,12 @@
         private Label label1;
         private Label label2;
         private TextBox TxtKey;
-        private Button BtnKey;
         private PictureBox pictureBox1;
         private Label label3;
+        private Label label4;
+        private TextBox TxtIV;
+        private Label label5;
+        private ComboBox CbPadding;
+        private Button BtnConfirmAll;
     }
 }
