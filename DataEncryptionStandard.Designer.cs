@@ -45,17 +45,19 @@
             TxtIVDec = new TextBox();
             label10 = new Label();
             groupBox1 = new GroupBox();
-            groupBox2 = new GroupBox();
+            label9 = new Label();
+            CbMode = new ComboBox();
+            GbEnc = new GroupBox();
             BtnClearEnc = new Button();
             label6 = new Label();
             CbOutputFormat = new ComboBox();
-            groupBox3 = new GroupBox();
+            GbDec = new GroupBox();
             BtnClearDec = new Button();
             label8 = new Label();
             CbInputFormat = new ComboBox();
             groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
-            groupBox3.SuspendLayout();
+            GbEnc.SuspendLayout();
+            GbDec.SuspendLayout();
             SuspendLayout();
             // 
             // BtnDecrypt
@@ -63,7 +65,7 @@
             BtnDecrypt.Location = new Point(170, 249);
             BtnDecrypt.Name = "BtnDecrypt";
             BtnDecrypt.Size = new Size(75, 23);
-            BtnDecrypt.TabIndex = 11;
+            BtnDecrypt.TabIndex = 13;
             BtnDecrypt.Text = "Decrypt";
             BtnDecrypt.UseVisualStyleBackColor = true;
             BtnDecrypt.Click += BtnDecrypt_Click;
@@ -74,7 +76,7 @@
             TxtPlain.Multiline = true;
             TxtPlain.Name = "TxtPlain";
             TxtPlain.Size = new Size(229, 104);
-            TxtPlain.TabIndex = 4;
+            TxtPlain.TabIndex = 5;
             // 
             // TxtEncrypted
             // 
@@ -82,14 +84,14 @@
             TxtEncrypted.Multiline = true;
             TxtEncrypted.Name = "TxtEncrypted";
             TxtEncrypted.Size = new Size(229, 104);
-            TxtEncrypted.TabIndex = 8;
+            TxtEncrypted.TabIndex = 10;
             // 
             // BtnEncrypt
             // 
             BtnEncrypt.Location = new Point(15, 250);
             BtnEncrypt.Name = "BtnEncrypt";
             BtnEncrypt.Size = new Size(75, 23);
-            BtnEncrypt.TabIndex = 7;
+            BtnEncrypt.TabIndex = 8;
             BtnEncrypt.Text = "Encrypt";
             BtnEncrypt.UseVisualStyleBackColor = true;
             BtnEncrypt.Click += BtnEncrypt_Click;
@@ -144,7 +146,7 @@
             TxtIVEnc.MaxLength = 8;
             TxtIVEnc.Name = "TxtIVEnc";
             TxtIVEnc.Size = new Size(229, 23);
-            TxtIVEnc.TabIndex = 5;
+            TxtIVEnc.TabIndex = 6;
             // 
             // label5
             // 
@@ -162,7 +164,7 @@
             CbPadding.Items.AddRange(new object[] { "PKCS7", "ZeroPadding" });
             CbPadding.Location = new Point(13, 95);
             CbPadding.Name = "CbPadding";
-            CbPadding.Size = new Size(503, 23);
+            CbPadding.Size = new Size(243, 23);
             CbPadding.TabIndex = 2;
             // 
             // BtnConfirmAll
@@ -170,7 +172,7 @@
             BtnConfirmAll.Location = new Point(441, 136);
             BtnConfirmAll.Name = "BtnConfirmAll";
             BtnConfirmAll.Size = new Size(75, 23);
-            BtnConfirmAll.TabIndex = 3;
+            BtnConfirmAll.TabIndex = 4;
             BtnConfirmAll.Text = "Confirm";
             BtnConfirmAll.UseVisualStyleBackColor = true;
             BtnConfirmAll.Click += BtnConfirmAll_Click;
@@ -190,7 +192,7 @@
             TxtIVDec.MaxLength = 8;
             TxtIVDec.Name = "TxtIVDec";
             TxtIVDec.Size = new Size(229, 23);
-            TxtIVDec.TabIndex = 9;
+            TxtIVDec.TabIndex = 11;
             // 
             // label10
             // 
@@ -202,6 +204,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label9);
+            groupBox1.Controls.Add(CbMode);
             groupBox1.Controls.Add(TxtKey);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label5);
@@ -214,29 +218,48 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Key and Padding";
             // 
-            // groupBox2
+            // label9
             // 
-            groupBox2.Controls.Add(BtnClearEnc);
-            groupBox2.Controls.Add(label6);
-            groupBox2.Controls.Add(CbOutputFormat);
-            groupBox2.Controls.Add(label4);
-            groupBox2.Controls.Add(TxtPlain);
-            groupBox2.Controls.Add(BtnEncrypt);
-            groupBox2.Controls.Add(label1);
-            groupBox2.Controls.Add(TxtIVEnc);
-            groupBox2.Location = new Point(12, 210);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(256, 315);
-            groupBox2.TabIndex = 14;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Encryption";
+            label9.AutoSize = true;
+            label9.Location = new Point(273, 77);
+            label9.Name = "label9";
+            label9.Size = new Size(38, 15);
+            label9.TabIndex = 15;
+            label9.Text = "Mode";
+            // 
+            // CbMode
+            // 
+            CbMode.DropDownStyle = ComboBoxStyle.DropDownList;
+            CbMode.FormattingEnabled = true;
+            CbMode.Items.AddRange(new object[] { "CBC", "ECB" });
+            CbMode.Location = new Point(273, 95);
+            CbMode.Name = "CbMode";
+            CbMode.Size = new Size(243, 23);
+            CbMode.TabIndex = 3;
+            // 
+            // GbEnc
+            // 
+            GbEnc.Controls.Add(BtnClearEnc);
+            GbEnc.Controls.Add(label6);
+            GbEnc.Controls.Add(CbOutputFormat);
+            GbEnc.Controls.Add(label4);
+            GbEnc.Controls.Add(TxtPlain);
+            GbEnc.Controls.Add(BtnEncrypt);
+            GbEnc.Controls.Add(label1);
+            GbEnc.Controls.Add(TxtIVEnc);
+            GbEnc.Location = new Point(12, 210);
+            GbEnc.Name = "GbEnc";
+            GbEnc.Size = new Size(256, 315);
+            GbEnc.TabIndex = 14;
+            GbEnc.TabStop = false;
+            GbEnc.Text = "Encryption";
             // 
             // BtnClearEnc
             // 
             BtnClearEnc.Location = new Point(15, 279);
             BtnClearEnc.Name = "BtnClearEnc";
             BtnClearEnc.Size = new Size(75, 23);
-            BtnClearEnc.TabIndex = 16;
+            BtnClearEnc.TabIndex = 9;
             BtnClearEnc.Text = "Clear";
             BtnClearEnc.UseVisualStyleBackColor = true;
             BtnClearEnc.Click += BtnClearEnc_Click;
@@ -258,31 +281,31 @@
             CbOutputFormat.Location = new Point(96, 251);
             CbOutputFormat.Name = "CbOutputFormat";
             CbOutputFormat.Size = new Size(146, 23);
-            CbOutputFormat.TabIndex = 6;
+            CbOutputFormat.TabIndex = 7;
             // 
-            // groupBox3
+            // GbDec
             // 
-            groupBox3.Controls.Add(BtnClearDec);
-            groupBox3.Controls.Add(label8);
-            groupBox3.Controls.Add(CbInputFormat);
-            groupBox3.Controls.Add(TxtEncrypted);
-            groupBox3.Controls.Add(BtnDecrypt);
-            groupBox3.Controls.Add(label2);
-            groupBox3.Controls.Add(TxtIVDec);
-            groupBox3.Controls.Add(label7);
-            groupBox3.Location = new Point(283, 210);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(261, 315);
-            groupBox3.TabIndex = 26;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "Decryption";
+            GbDec.Controls.Add(BtnClearDec);
+            GbDec.Controls.Add(label8);
+            GbDec.Controls.Add(CbInputFormat);
+            GbDec.Controls.Add(TxtEncrypted);
+            GbDec.Controls.Add(BtnDecrypt);
+            GbDec.Controls.Add(label2);
+            GbDec.Controls.Add(TxtIVDec);
+            GbDec.Controls.Add(label7);
+            GbDec.Location = new Point(283, 210);
+            GbDec.Name = "GbDec";
+            GbDec.Size = new Size(261, 315);
+            GbDec.TabIndex = 26;
+            GbDec.TabStop = false;
+            GbDec.Text = "Decryption";
             // 
             // BtnClearDec
             // 
             BtnClearDec.Location = new Point(170, 278);
             BtnClearDec.Name = "BtnClearDec";
             BtnClearDec.Size = new Size(75, 23);
-            BtnClearDec.TabIndex = 17;
+            BtnClearDec.TabIndex = 14;
             BtnClearDec.Text = "Clear";
             BtnClearDec.UseVisualStyleBackColor = true;
             BtnClearDec.Click += BtnClearDec_Click;
@@ -304,25 +327,25 @@
             CbInputFormat.Location = new Point(16, 250);
             CbInputFormat.Name = "CbInputFormat";
             CbInputFormat.Size = new Size(146, 23);
-            CbInputFormat.TabIndex = 10;
+            CbInputFormat.TabIndex = 12;
             // 
             // DataEncryptionStandard
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(555, 537);
-            Controls.Add(groupBox3);
-            Controls.Add(groupBox2);
+            Controls.Add(GbDec);
+            Controls.Add(GbEnc);
             Controls.Add(groupBox1);
             Controls.Add(label10);
             Name = "DataEncryptionStandard";
             Text = "DataEncryptionStandard";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
-            groupBox3.ResumeLayout(false);
-            groupBox3.PerformLayout();
+            GbEnc.ResumeLayout(false);
+            GbEnc.PerformLayout();
+            GbDec.ResumeLayout(false);
+            GbDec.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -346,13 +369,15 @@
         private TextBox TxtIVDec;
         private Label label10;
         private GroupBox groupBox1;
-        private GroupBox groupBox2;
-        private GroupBox groupBox3;
+        private GroupBox GbEnc;
+        private GroupBox GbDec;
         private Label label6;
         private ComboBox CbOutputFormat;
         private Label label8;
         private ComboBox CbInputFormat;
         private Button BtnClearEnc;
         private Button BtnClearDec;
+        private Label label9;
+        private ComboBox CbMode;
     }
 }

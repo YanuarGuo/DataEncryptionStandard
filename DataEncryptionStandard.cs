@@ -11,17 +11,40 @@ namespace DataEncryptionStandard
     {
         public string? Key { get; set; }
         public string? IV { get; set; }
+        public string? Mode { get; set; }
         public new string? Padding { get; set; }
 
         public DataEncryptionStandard()
         {
             InitializeComponent();
+            GbEnc.Enabled = false;
+            GbDec.Enabled = false;
         }
 
         private void BtnConfirmAll_Click(object sender, EventArgs e)
         {
             Padding = CbPadding.Text;
             Key = TxtKey.Text;
+            Mode = CbMode.Text;
+            GbEnc.Enabled = true;
+            GbDec.Enabled = true;
+            if (CbMode.Text == "ECB")
+            {
+                TxtIVEnc.Text = "";
+                TxtIVDec.Text = "";
+                TxtIVEnc.Enabled = false;
+                TxtIVDec.Enabled = false;
+            }
+            else
+            {
+                TxtIVEnc.Enabled = true;
+                TxtIVDec.Enabled = true;
+            }
+            if (string.IsNullOrEmpty(Key) || string.IsNullOrEmpty(Padding))
+            {
+                MessageBox.Show("Key / Padding cannot be null or empty!");
+                return;
+            }
             MessageBox.Show("Key / Padding confirmed!");
         }
 
@@ -30,15 +53,15 @@ namespace DataEncryptionStandard
             IV = TxtIVEnc.Text;
             if (
                 string.IsNullOrEmpty(Key)
-                || string.IsNullOrEmpty(IV)
                 || string.IsNullOrEmpty(Padding)
+                || string.IsNullOrEmpty(Mode)
             )
             {
                 MessageBox.Show("Key / IV / Padding cannot be null or empty!");
                 return;
             }
 
-            string encrypted = Encrypt(TxtPlain.Text, Key, IV, Padding, CbOutputFormat.Text);
+            string encrypted = Encrypt(TxtPlain.Text, Key, IV, Padding, CbOutputFormat.Text, Mode);
             TxtEncrypted.Text = encrypted;
             MessageBox.Show("Encrypted text: " + encrypted);
         }
@@ -55,14 +78,21 @@ namespace DataEncryptionStandard
             IV = TxtIVDec.Text;
             if (
                 string.IsNullOrEmpty(Key)
-                || string.IsNullOrEmpty(IV)
                 || string.IsNullOrEmpty(Padding)
+                || string.IsNullOrEmpty(Mode)
             )
             {
                 MessageBox.Show("Key / IV / Padding cannot be null or empty!");
                 return;
             }
-            string decrypted = Decrypt(TxtEncrypted.Text, Key, IV, Padding, CbInputFormat.Text);
+            string decrypted = Decrypt(
+                TxtEncrypted.Text,
+                Key,
+                IV,
+                Padding,
+                CbInputFormat.Text,
+                Mode
+            );
             TxtPlain.Text = decrypted;
             MessageBox.Show("Decrypted text: " + decrypted);
         }
@@ -74,63 +104,38 @@ namespace DataEncryptionStandard
             CbInputFormat.SelectedIndex = -1;
         }
 
-        public static string Decrypt(
-            string cipherText,
-            string Key,
-            string IV,
-            string Padding,
-            string InputFormat
-        )
-        {
-            using var provider = DES.Create();
-
-            byte[] keyBytes = PadKeyTo8Bytes(Encoding.ASCII.GetBytes(Key), Padding);
-            byte[] ivBytes = Encoding.ASCII.GetBytes(IV);
-
-            if (ivBytes.Length != 8)
-                throw new ArgumentException("IV must be exactly 8 bytes long");
-
-            provider.Key = keyBytes;
-            provider.IV = ivBytes;
-            provider.Padding = PaddingMode.PKCS7;
-
-            // Convert input based on format
-            byte[] cipherBytes =
-                InputFormat == "HEX"
-                    ? ConvertHexToBytes(cipherText)
-                    : Convert.FromBase64String(cipherText);
-
-            using var ms = new MemoryStream();
-            using (
-                var cs = new CryptoStream(ms, provider.CreateDecryptor(), CryptoStreamMode.Write)
-            )
-            {
-                cs.Write(cipherBytes, 0, cipherBytes.Length);
-                cs.FlushFinalBlock();
-            }
-
-            return Encoding.ASCII.GetString(ms.ToArray());
-        }
-
         public static string Encrypt(
             string plainText,
             string Key,
             string IV,
             string Padding,
-            string OutputFormat
+            string OutputFormat,
+            string CipherMode
         )
         {
             using var provider = DES.Create();
 
             byte[] keyBytes = PadKeyTo8Bytes(Encoding.ASCII.GetBytes(Key), Padding);
-            byte[] ivBytes = Encoding.ASCII.GetBytes(IV);
-
-            if (ivBytes.Length != 8)
-                throw new ArgumentException("IV must be exactly 8 bytes long");
+            Debug.WriteLine($"Key: {BitConverter.ToString(keyBytes)}");
 
             provider.Key = keyBytes;
-            provider.IV = ivBytes;
-            provider.Padding = PaddingMode.PKCS7;
+
+            provider.Mode = CipherMode.ToUpper() switch
+            {
+                "CBC" => System.Security.Cryptography.CipherMode.CBC,
+                "ECB" => System.Security.Cryptography.CipherMode.ECB,
+                _ => throw new ArgumentException(
+                    "Invalid Cipher Mode. Choose either 'CBC' or 'ECB'."
+                ),
+            };
+
+            if (provider.Mode == System.Security.Cryptography.CipherMode.CBC)
+            {
+                byte[] ivBytes = Encoding.ASCII.GetBytes(IV);
+                if (ivBytes.Length != 8)
+                    throw new ArgumentException("IV must be exactly 8 bytes long");
+                provider.IV = ivBytes;
+            }
 
             using var ms = new MemoryStream();
             using (
@@ -149,37 +154,76 @@ namespace DataEncryptionStandard
                 : Convert.ToBase64String(encryptedBytes);
         }
 
-        private static byte[] ConvertHexToBytes(string hex)
+        public static string Decrypt(
+            string cipherText,
+            string Key,
+            string IV,
+            string Padding,
+            string InputFormat,
+            string CipherMode
+        )
         {
-            if (hex.Length % 2 != 0)
-                throw new ArgumentException("Invalid HEX input length.");
+            using var provider = DES.Create();
 
-            byte[] bytes = new byte[hex.Length / 2];
-            for (int i = 0; i < bytes.Length; i++)
-                bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+            byte[] keyBytes = PadKeyTo8Bytes(Encoding.ASCII.GetBytes(Key), Padding);
+            Debug.WriteLine($"Key: {BitConverter.ToString(keyBytes)}");
 
-            return bytes;
+            provider.Key = keyBytes;
+
+            provider.Mode = CipherMode.ToUpper() switch
+            {
+                "CBC" => System.Security.Cryptography.CipherMode.CBC,
+                "ECB" => System.Security.Cryptography.CipherMode.ECB,
+                _ => throw new ArgumentException(
+                    "Invalid Cipher Mode. Choose either 'CBC' or 'ECB'."
+                ),
+            };
+
+            if (provider.Mode == System.Security.Cryptography.CipherMode.CBC)
+            {
+                byte[] ivBytes = Encoding.ASCII.GetBytes(IV);
+                if (ivBytes.Length != 8)
+                    throw new ArgumentException("IV must be exactly 8 bytes long");
+                provider.IV = ivBytes;
+            }
+
+            byte[] cipherBytes = InputFormat switch
+            {
+                "HEX" => Enumerable
+                    .Range(0, cipherText.Length / 2)
+                    .Select(i => Convert.ToByte(cipherText.Substring(i * 2, 2), 16))
+                    .ToArray(),
+                "Base64" => Convert.FromBase64String(cipherText),
+                _ => throw new ArgumentException(
+                    "Invalid Input Format. Choose either 'HEX' or 'Base64'."
+                ),
+            };
+
+            using var ms = new MemoryStream();
+            using (
+                var cs = new CryptoStream(ms, provider.CreateDecryptor(), CryptoStreamMode.Write)
+            )
+            {
+                cs.Write(cipherBytes, 0, cipherBytes.Length);
+                cs.FlushFinalBlock();
+            }
+
+            return Encoding.ASCII.GetString(ms.ToArray());
         }
 
         private static byte[] PadKeyTo8Bytes(byte[] Key, string Padding)
         {
             int keyLength = Key.Length;
-
-            if (keyLength > 8)
-                throw new ArgumentException("Key must be at most 8 bytes long");
-
             int padLength = 8 - keyLength;
 
             if (Padding == "PKCS7")
             {
                 byte padByte = (byte)padLength;
-                Debug.WriteLine($"Padding Key with {padLength} bytes of {padByte} (PKCS7)");
-                return Key.Concat(Enumerable.Repeat(padByte, padLength)).ToArray();
+                return [.. Key, .. Enumerable.Repeat(padByte, padLength)];
             }
             else if (Padding == "ZeroPadding")
             {
-                Debug.WriteLine($"Padding Key with {padLength} bytes of 0x00 (ZeroPadding)");
-                return Key.Concat(new byte[padLength]).ToArray();
+                return [.. Key, .. new byte[padLength]];
             }
             else
             {
