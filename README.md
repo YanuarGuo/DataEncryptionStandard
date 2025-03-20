@@ -63,3 +63,5 @@ This project is a simple Windows Forms application that allows users to encrypt 
 ## Author
 Developed by **Yanuar Christy Ade Utama**.
 
+## Contributions
+Feel free to submit **issues, feature requests, or pull requests** to improve this project!
